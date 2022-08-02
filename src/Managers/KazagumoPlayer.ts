@@ -61,7 +61,8 @@ export default class KazagumoPlayer {
    * Whether the player is playing or not
    */
   public playing: boolean = false;
-  /**
+
+   /**
    * Loop status
    */
   public loop: 'none' | 'queue' | 'track' = 'none';
@@ -324,11 +325,27 @@ export default class KazagumoPlayer {
 
     return this;
   }
-public get setKaraoke() { 
-  return this.shoukaku.setKaraoke.bind(this.shoukaku) 
+   /**
+   * seek the player
+   * @param seek Seek
+   * @returns KazagumoPlayer
+   */
+  public setseek(time: number): KazagumoPlayer {
     if (this.state === PlayerState.DESTROYED) throw new KazagumoError(1, 'Player is already destroyed');
-    
-        this.shoukaku.filters.karaoke = karaoke|| null;
+    if (isNaN(time)) throw new KazagumoError(1, 'seek must be a number');
+
+    if (!this.queue.totalSize) return this;
+    this.shoukaku.seekTo(time);
+
+    return this;
+  }
+   /**
+   * custom filter
+   * @param filter Filter
+   * @returns KazagumoPlayer
+   */
+  public setKaraoke(): KazagumoPlayer { 
+    if (this.state === PlayerState.DESTROYED) throw new KazagumoError(1, 'Player is already destroyed');
     
         this.send({
           op: 'filters',
