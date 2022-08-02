@@ -324,6 +324,18 @@ export default class KazagumoPlayer {
 
     return this;
   }
+  public setKaraoke(): KazagumoPlayer {
+    if (this.state === PlayerState.DESTROYED) throw new KazagumoError(1, 'Player is already destroyed');
+    
+        this.shoukaku.filters.karaoke = karaoke|| null;
+    
+        this.send({
+          op: 'filters',
+          guildId: this.guildId,
+          rotation: { rotationHz: 0.2 },
+    });
+        return this;
+    }
 
   /**
    * Connect to the voice channel
