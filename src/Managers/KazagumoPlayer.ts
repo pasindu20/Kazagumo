@@ -324,7 +324,8 @@ export default class KazagumoPlayer {
 
     return this;
   }
-  public setKaraoke(): KazagumoPlayer {
+public get setKaraoke() { 
+  return this.shoukaku.setKaraoke.bind(this.shoukaku) 
     if (this.state === PlayerState.DESTROYED) throw new KazagumoError(1, 'Player is already destroyed');
     
         this.shoukaku.filters.karaoke = karaoke|| null;
