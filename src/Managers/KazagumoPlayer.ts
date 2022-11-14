@@ -204,32 +204,6 @@ export class KazagumoPlayer {
 
     return this;
   }
-
-  /**
-   * Set voice channel and move the player to the voice channel
-   * @param voiceId Voice channel Id
-   * @returns KazagumoPlayer
-   */
-  public setVoiceChannel(voiceId: Snowflake): KazagumoPlayer {
-    if (this.state === PlayerState.DESTROYED) throw new KazagumoError(1, 'Player is already destroyed');
-    this.state = PlayerState.CONNECTING;
-
-    this.voiceId = voiceId;
-    this.kazagumo.KazagumoOptions.send(this.guildId, {
-      op: 4,
-      d: {
-        guild_id: this.guildId,
-        channel_id: this.voiceId,
-        self_mute: false,
-        self_deaf: this.options.deaf,
-      },
-    });
-
-    this.emit(Events.Debug, `Player ${this.guildId} moved to voice channel ${voiceId}`);
-
-    return this;
-  }
-
   /**
    * Set loop mode
    * @param [loop] Loop mode
@@ -342,16 +316,6 @@ export class KazagumoPlayer {
       throw new KazagumoError(1, 'Player is already connected');
     this.state = PlayerState.CONNECTING;
 
-    this.kazagumo.KazagumoOptions.send(this.guildId, {
-      op: 4,
-      d: {
-        guild_id: this.guildId,
-        channel_id: this.voiceId,
-        self_mute: false,
-        self_deaf: this.options.deaf,
-      },
-    });
-
     this.state = PlayerState.CONNECTED;
 
     this.emit(Events.Debug, `Player ${this.guildId} connected`);
@@ -369,16 +333,7 @@ export class KazagumoPlayer {
     this.state = PlayerState.DISCONNECTING;
 
     this.pause(true);
-    this.kazagumo.KazagumoOptions.send(this.guildId, {
-      op: 4,
-      d: {
-        guild_id: this.guildId,
-        channel_id: null,
-        self_mute: false,
-        self_deaf: false,
-      },
-    });
-
+    this.shoukaku.connection.disconnect();
     this.voiceId = null;
     this.state = PlayerState.DISCONNECTED;
 
