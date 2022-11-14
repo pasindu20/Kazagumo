@@ -62,7 +62,7 @@ export default class KazagumoPlayer {
    */
   public playing: boolean = false;
 
-   /**
+  /**
    * Loop status
    */
   public loop: 'none' | 'queue' | 'track' = 'none';
@@ -325,7 +325,7 @@ export default class KazagumoPlayer {
 
     return this;
   }
-   /**
+  /**
    * seek the player
    * @param seek Seek
    * @returns KazagumoPlayer
@@ -339,7 +339,7 @@ export default class KazagumoPlayer {
 
     return this;
   }
-   /**
+  /**
    * custom filter
    * @param filter Filter
    * @returns KazagumoPlayer
