@@ -365,16 +365,6 @@ export default class KazagumoPlayer {
       throw new KazagumoError(1, 'Player is already connected');
     this.state = PlayerState.CONNECTING;
 
-    this.kazagumo.KazagumoOptions.send(this.guildId, {
-      op: 4,
-      d: {
-        guild_id: this.guildId,
-        channel_id: this.voiceId,
-        self_mute: false,
-        self_deaf: this.options.deaf,
-      },
-    });
-
     this.state = PlayerState.CONNECTED;
 
     this.emit(Events.Debug, `Player ${this.guildId} connected`);
@@ -392,16 +382,7 @@ export default class KazagumoPlayer {
     this.state = PlayerState.DISCONNECTING;
 
     this.pause(true);
-    this.kazagumo.KazagumoOptions.send(this.guildId, {
-      op: 4,
-      d: {
-        guild_id: this.guildId,
-        channel_id: null,
-        self_mute: false,
-        self_deaf: false,
-      },
-    });
-
+    this.shoukaku.connection.disconnect();
     this.voiceId = null;
     this.state = PlayerState.DISCONNECTED;
 
