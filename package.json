@@ -1,5 +1,5 @@
 {
-  "name": "kazagumo",
+  "name": "lara-kazagumo",
   "version": "2.2.5",
   "description": "A shoukaku wrapper with built-in queue support.",
   "main": "dist/Index.js",
