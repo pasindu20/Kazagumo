@@ -209,15 +209,6 @@ export default class KazagumoPlayer {
     this.state = PlayerState.CONNECTING;
 
     this.voiceId = voiceId;
-    this.kazagumo.KazagumoOptions.send(this.guildId, {
-      op: 4,
-      d: {
-        guild_id: this.guildId,
-        channel_id: this.voiceId,
-        self_mute: false,
-        self_deaf: this.options.deaf,
-      },
-    });
 
     this.emit(Events.Debug, `Player ${this.guildId} moved to voice channel ${voiceId}`);
 
