@@ -19,23 +19,10 @@ export interface KazagumoOptions {
   extends?: {
     player?: Constructor<KazagumoPlayer>;
   };
-  /** Send to guild's shard */
-  send: (guildId: Snowflake, payload: Payload) => void;
 }
 
 export type SearchEngines = 'youtube' | 'soundcloud' | 'youtube_music' | string;
 export type YoutubeThumbnail = 'default' | 'hqdefault' | 'mqdefault' | 'sddefault' | 'maxresdefault';
-
-export interface Payload {
-  /** The OP code */
-  op: number;
-  d: {
-    guild_id: string;
-    channel_id: string | null;
-    self_mute: boolean;
-    self_deaf: boolean;
-  };
-}
 
 export const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
