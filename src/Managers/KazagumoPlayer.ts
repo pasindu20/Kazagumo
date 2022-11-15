@@ -317,36 +317,6 @@ export default class KazagumoPlayer {
     return this;
   }
   /**
-   * seek the player
-   * @param seek Seek
-   * @returns KazagumoPlayer
-   */
-  public setseek(time: number): KazagumoPlayer {
-    if (this.state === PlayerState.DESTROYED) throw new KazagumoError(1, 'Player is already destroyed');
-    if (isNaN(time)) throw new KazagumoError(1, 'seek must be a number');
-
-    if (!this.queue.totalSize) return this;
-    this.shoukaku.seekTo(time);
-
-    return this;
-  }
-  /**
-   * custom filter
-   * @param filter Filter
-   * @returns KazagumoPlayer
-   */
-  public setKaraoke(): KazagumoPlayer { 
-    if (this.state === PlayerState.DESTROYED) throw new KazagumoError(1, 'Player is already destroyed');
-    
-        this.send({
-          op: 'filters',
-          guildId: this.guildId,
-          rotation: { rotationHz: 0.2 },
-    });
-        return this;
-    }
-
-  /**
    * Connect to the voice channel
    * @returns KazagumoPlayer
    */
