@@ -18,8 +18,6 @@ export interface KazagumoOptions {
   extends?: {
     player?: Constructor<KazagumoPlayer>;
   };
-  /** Send to guild's shard */
-  send: (guildId: string, payload: Payload) => void;
 }
 
 export type SearchEngines = 'youtube' | 'soundcloud' | 'youtube_music' | string;

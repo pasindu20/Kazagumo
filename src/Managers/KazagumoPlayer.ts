@@ -61,6 +61,7 @@ export default class KazagumoPlayer {
    * Whether the player is playing or not
    */
   public playing: boolean = false;
+
   /**
    * Loop status
    */
@@ -208,15 +209,6 @@ export default class KazagumoPlayer {
     this.state = PlayerState.CONNECTING;
 
     this.voiceId = voiceId;
-    this.kazagumo.KazagumoOptions.send(this.guildId, {
-      op: 4,
-      d: {
-        guild_id: this.guildId,
-        channel_id: this.voiceId,
-        self_mute: false,
-        self_deaf: this.options.deaf,
-      },
-    });
 
     this.emit(Events.Debug, `Player ${this.guildId} moved to voice channel ${voiceId}`);
 
@@ -324,6 +316,35 @@ export default class KazagumoPlayer {
 
     return this;
   }
+  /**
+   * seek the player
+   * @param seek Seek
+   * @returns KazagumoPlayer
+   */
+  public setseek(time: number): KazagumoPlayer {
+    if (this.state === PlayerState.DESTROYED) throw new KazagumoError(1, 'Player is already destroyed');
+    if (isNaN(time)) throw new KazagumoError(1, 'seek must be a number');
+
+    if (!this.queue.totalSize) return this;
+    this.shoukaku.seekTo(time);
+
+    return this;
+  }
+  /**
+   * custom filter
+   * @param filter Filter
+   * @returns KazagumoPlayer
+   */
+  public setKaraoke(): KazagumoPlayer { 
+    if (this.state === PlayerState.DESTROYED) throw new KazagumoError(1, 'Player is already destroyed');
+    
+        this.send({
+          op: 'filters',
+          guildId: this.guildId,
+          rotation: { rotationHz: 0.2 },
+    });
+        return this;
+    }
 
   /**
    * Connect to the voice channel
@@ -334,16 +355,6 @@ export default class KazagumoPlayer {
     if (this.state === PlayerState.CONNECTED || !!this.voiceId)
       throw new KazagumoError(1, 'Player is already connected');
     this.state = PlayerState.CONNECTING;
-
-    this.kazagumo.KazagumoOptions.send(this.guildId, {
-      op: 4,
-      d: {
-        guild_id: this.guildId,
-        channel_id: this.voiceId,
-        self_mute: false,
-        self_deaf: this.options.deaf,
-      },
-    });
 
     this.state = PlayerState.CONNECTED;
 
@@ -362,16 +373,7 @@ export default class KazagumoPlayer {
     this.state = PlayerState.DISCONNECTING;
 
     this.pause(true);
-    this.kazagumo.KazagumoOptions.send(this.guildId, {
-      op: 4,
-      d: {
-        guild_id: this.guildId,
-        channel_id: null,
-        self_mute: false,
-        self_deaf: false,
-      },
-    });
-
+    this.shoukaku.connection.disconnect();
     this.voiceId = null;
     this.state = PlayerState.DISCONNECTED;
 
